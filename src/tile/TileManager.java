@@ -57,6 +57,21 @@ public class TileManager {
             this.tile[11].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/fall.png"));
             this.tile[12] = new Tile();
             this.tile[12].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/waterfall.png"));
+            this.tile[12] = new Tile();
+            this.tile[12].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/waterfall.png"));
+            this.tile[13] = new Tile();
+            this.tile[13].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treeup_left.png"));
+            this.tile[14] = new Tile();
+            this.tile[14].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treeup_right.png"));
+            this.tile[15] = new Tile();
+            this.tile[15].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treedown_left.png"));
+            this.tile[16] = new Tile();
+            this.tile[16].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treedown_right.png"));
+
+
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
