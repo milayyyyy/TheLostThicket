@@ -16,7 +16,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp){
         this.gp = gp;
-        tile = new Tile[20];
+        tile = new Tile[50];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/maps/world01.txt");
@@ -67,6 +67,24 @@ public class TileManager {
             this.tile[15].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treedown_left.png"));
             this.tile[16] = new Tile();
             this.tile[16].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treedown_right.png"));
+            this.tile[17] = new Tile();
+            this.tile[17].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit1.png"));
+            this.tile[18] = new Tile();
+            this.tile[18].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit2.png"));
+
+            this.tile[19] = new Tile();
+            this.tile[19].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit1_1.png"));
+            this.tile[20] = new Tile();
+            this.tile[20].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit1_2.png"));
+            this.tile[21] = new Tile();
+            this.tile[21].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit1_3.png"));
+            this.tile[22] = new Tile();
+            this.tile[22].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit1_4.png"));
+
+
+
+            this.tile[23] = new Tile();
+            this.tile[23].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pit4.png"));
 
 
 

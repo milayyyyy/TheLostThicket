@@ -21,14 +21,33 @@ public class EventHandler {
             damagePit();
         }
     }
-
     public boolean checkPitTile() {
-        int playerCol = gp.player.worldX / gp.tileSize;
-        int playerRow = gp.player.worldY / gp.tileSize;
-        int tileNum = gp.tileM.mapTileNum[playerCol][playerRow];
+        int leftCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+        int rightCol = (gp.player.worldX + gp.player.solidArea.x + gp.player.solidArea.width) / gp.tileSize;
+        int topRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+        int bottomRow = (gp.player.worldY + gp.player.solidArea.y + gp.player.solidArea.height) / gp.tileSize;
 
-        return tileNum == 17;
+        int tileTopLeft = gp.tileM.mapTileNum[leftCol][topRow];
+        int tileTopRight = gp.tileM.mapTileNum[rightCol][topRow];
+        int tileBottomLeft = gp.tileM.mapTileNum[leftCol][bottomRow];
+        int tileBottomRight = gp.tileM.mapTileNum[rightCol][bottomRow];
+
+        // 🛠️ If any part of the player steps onto tile 18 (normal), turn it into a trap instantly
+        if (tileTopLeft == 18 || tileTopRight == 18 || tileBottomLeft == 18 || tileBottomRight == 18) {
+            gp.tileM.mapTileNum[leftCol][topRow] = 23;
+            gp.tileM.mapTileNum[rightCol][topRow] = 23;
+            gp.tileM.mapTileNum[leftCol][bottomRow] = 23;
+            gp.tileM.mapTileNum[rightCol][bottomRow] = 23;
+            gp.player.setTrapActivated();
+            return false; // Let them move into the pit first
+        }
+
+        // 🛠️ If already a trap (17), trigger fall
+        return (tileTopLeft == 23 && tileTopRight == 23 && tileBottomLeft == 23 && tileBottomRight == 23);
     }
+
+
+
 
     public boolean hit(int col, int row, String reqDirection) {
         boolean hit = false;

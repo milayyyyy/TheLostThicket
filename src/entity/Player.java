@@ -22,6 +22,10 @@ public class Player extends Entity {
     public boolean isFalling = false; // Indicates if player is falling
     public int fallCounter = 0; // Timer for falling animation
 
+    private boolean trapActivated = false;
+    private int fallDelayCounter = 0;
+
+
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;
@@ -33,8 +37,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 103;
-        worldY = gp.tileSize * 101;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 4;
         direction = "right";
     }
@@ -55,6 +59,8 @@ public class Player extends Entity {
                 attackLeft2 = ImageIO.read(getClass().getResourceAsStream("/player/Elden_attack_left2.png"));
                 attackRight1 = ImageIO.read(getClass().getResourceAsStream("/player/Elden_attack_right1.png"));
                 attackRight2 = ImageIO.read(getClass().getResourceAsStream("/player/Elden_attack_right2.png"));
+
+                fall = ImageIO.read(getClass().getResourceAsStream("/player/Elden_falling1.png"));
 
             } else if (gp.chosenCharacter == 1) { // Briana
                 up1 = ImageIO.read(getClass().getResourceAsStream("/player/Briana_up1.png"));
@@ -90,42 +96,35 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if (gp.chosenCharacter != this.chosenCharacter) {
-            this.chosenCharacter = gp.chosenCharacter;
-            getPlayerImage();
-        }
-
-        if (attackCooldown > 0) {
-            attackCooldown--;
-        }
-
-        // 🛠️ Handle Falling Animation (Stops Movement)
         if (isFalling) {
             fallAnimation();
-            return; // Prevent movement updates while falling
+            return;
         }
 
-        // 🛠️ Check if Player Should Fall
+
         if (gp.eHandler.checkPitTile()) {
-            startFalling();
+            trapActivated = true;
+        }
+
+        if (trapActivated) {
+            fallDelayCounter++;
+            if (fallDelayCounter > 1) {
+                startFalling();
+                trapActivated = false;
+                fallDelayCounter = 0;
+            }
             return;
         }
 
         collisionOn = false;
 
         if (keyH.downPressed || keyH.leftPressed || keyH.upPressed || keyH.rightPressed) {
-            if (keyH.upPressed) {
-                direction = "up";
-            } else if (keyH.downPressed) {
-                direction = "down";
-            } else if (keyH.leftPressed) {
-                direction = "left";
-            } else if (keyH.rightPressed) {
-                direction = "right";
-            }
+            if (keyH.upPressed) direction = "up";
+            else if (keyH.downPressed) direction = "down";
+            else if (keyH.leftPressed) direction = "left";
+            else if (keyH.rightPressed) direction = "right";
 
             gp.ch.checkTile(this);
-
             int npcIndex = gp.ch.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
 
@@ -147,18 +146,36 @@ public class Player extends Entity {
     }
 
 
+
+
+    public void setTrapActivated() {
+        trapActivated = true;
+        fallDelayCounter = 0;
+    }
+
+
     public void startFalling() {
         isFalling = true;
         fallCounter = 0;
 
-        // 🛠 Move player inside the pit (center of tile)
-        worldX = (worldX / gp.tileSize) * gp.tileSize; // Align X to grid
-        worldY = (worldY / gp.tileSize) * gp.tileSize; // Align Y to grid
+        // 🛠 Snap Player to Pit Center
+        int tileCenterX = ((worldX / gp.tileSize) * gp.tileSize) + (gp.tileSize / 2) - (solidArea.width / 2);
+        int tileCenterY = ((worldY / gp.tileSize) * gp.tileSize) + (gp.tileSize / 2) - (solidArea.height / 2);
 
-        // Show dialogue before falling
+        worldX = tileCenterX;
+        worldY = tileCenterY;
+
+        // ✅ Ensure currentDialogue is NOT null before setting it
+        if (gp.ui.currentDialogue == null) {
+            gp.ui.currentDialogue = "You fell!";
+        } else {
+            gp.ui.currentDialogue = "You fell!";
+        }
+
+        // 🛠 Show Falling Message
         gp.gameState = gp.dialogueState;
-        gp.ui.currentDialogue = "You fell!";
     }
+
 
 
     public void fallAnimation() {

@@ -99,26 +99,32 @@ public class UI {
 
     }
 
-    public void drawDialogueScreen(){
-        //window
-        int x = gp.tileSize*2;
-        int y = gp.tileSize/2;
-        int width  = gp.screenWidth - (gp.tileSize*4);
-        int height = gp.tileSize*3;
+    public void drawDialogueScreen() {
+        // ✅ Ensure currentDialogue is never null
+        if (currentDialogue == null) {
+            currentDialogue = ""; // Set to empty string if null
+        }
 
-        drawSubWindow(x,y,width,height);
+        // Window for dialogue
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = gp.tileSize * 3;
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,20F));
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
 
         x += gp.tileSize;
         y += gp.tileSize;
 
-        for(String line : currentDialogue.split("\n")) {
+        // ✅ Safe way to split and draw dialogue
+        for (String line : currentDialogue.split("\n")) {
             g2.drawString(line, x, y);
             y += 40;
-
         }
     }
+
 
     public void drawSubWindow(int x, int y, int width, int height){
 
