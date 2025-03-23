@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker ch = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public SuperObject obj[] = new SuperObject[10];
+    public EventHandler eHandler = new EventHandler(this);
 
 
     //game state
@@ -43,9 +44,11 @@ public class GamePanel extends JPanel implements Runnable{
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     //entity
     public Entity npc[] = new Entity[10];
+    public Entity animals[] = new Entity[10];
 
 
 
@@ -125,6 +128,8 @@ public class GamePanel extends JPanel implements Runnable{
 
             //player
             player.draw(g2);
+
+            ui.draw(g2);
 
             g2.dispose();
         }

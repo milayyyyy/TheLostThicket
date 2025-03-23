@@ -19,6 +19,9 @@ public class Player extends Entity {
     private boolean attacking = false;
     private int attackCooldown = 0;
 
+    public boolean isFalling = false; // Indicates if player is falling
+    public int fallCounter = 0; // Timer for falling animation
+
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;
@@ -77,6 +80,8 @@ public class Player extends Entity {
                 attackRight1 = ImageIO.read(getClass().getResourceAsStream("/player/Orion_attack_right1.png"));
                 attackRight2 = ImageIO.read(getClass().getResourceAsStream("/player/Orion_attack_right2.png"));
 
+                fall = ImageIO.read(getClass().getResourceAsStream("/player/Orion_falling1.png"));
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,29 +99,19 @@ public class Player extends Entity {
             attackCooldown--;
         }
 
-        if (keyH.spacePressed && !isAttacking && attackCooldown == 0) {
-            if (gp.chosenCharacter == 0 || gp.chosenCharacter == 2) {
-                if (direction.equals("left")) {
-                    isAttacking = true;
-                    attackFrame = 0;
-                    attackCooldown = 20;
-                    attack("left");
-                } else if (direction.equals("right")) {
-                    isAttacking = true;
-                    attackFrame = 0;
-                    attackCooldown = 20;
-                    attack("right");
-                }
-            }
+        // 🛠️ Handle Falling Animation (Stops Movement)
+        if (isFalling) {
+            fallAnimation();
+            return; // Prevent movement updates while falling
         }
 
-
-        if (isAttacking) {
-            attackFrame++;
-            if (attackFrame > 10) {
-                isAttacking = false;
-            }
+        // 🛠️ Check if Player Should Fall
+        if (gp.eHandler.checkPitTile()) {
+            startFalling();
+            return;
         }
+
+        collisionOn = false;
 
         if (keyH.downPressed || keyH.leftPressed || keyH.upPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
@@ -129,8 +124,10 @@ public class Player extends Entity {
                 direction = "right";
             }
 
-            collisionOn = false;
             gp.ch.checkTile(this);
+
+            int npcIndex = gp.ch.checkEntity(this, gp.npc);
+            interactNPC(npcIndex);
 
             if (!collisionOn) {
                 switch (direction) {
@@ -150,31 +147,68 @@ public class Player extends Entity {
     }
 
 
+    public void startFalling() {
+        isFalling = true;
+        fallCounter = 0;
+
+        // 🛠 Move player inside the pit (center of tile)
+        worldX = (worldX / gp.tileSize) * gp.tileSize; // Align X to grid
+        worldY = (worldY / gp.tileSize) * gp.tileSize; // Align Y to grid
+
+        // Show dialogue before falling
+        gp.gameState = gp.dialogueState;
+        gp.ui.currentDialogue = "You fell!";
+    }
+
+
+    public void fallAnimation() {
+        if (fallCounter < 30) {
+            worldY += 2; // Move player down gradually
+            fallCounter++;
+        } else {
+            respawnPlayer(); // After animation, reset player
+        }
+    }
+
+
+    // 🛠️ Respawn After Falling
+    public void respawnPlayer() {
+        isFalling = false;
+        worldX = gp.tileSize * 23; // Reset position
+        worldY = gp.tileSize * 21;
+        gp.gameState = gp.playState; // Resume game state
+    }
+
+
+
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        if (isAttacking && (gp.chosenCharacter == 0 || gp.chosenCharacter == 2)) {
+        // 🛠 Falling Effect: Make the player appear inside the pit
+        if (isFalling) {
+            image = fall; // ✅ Use the falling sprite
+            int fallOffset = (fallCounter * gp.tileSize) / 30; // Moves player inside the pit gradually
+            g2.drawImage(image, screenX, screenY + fallOffset, gp.tileSize, gp.tileSize, null);
+            return; // Skip drawing other sprites
+        }
+
+        // 🛠 Attacking Animation
+        else if (isAttacking && (gp.chosenCharacter == 0 || gp.chosenCharacter == 2)) {
             if (direction.equals("left")) {
                 image = (attackFrame % 2 == 0) ? attackLeft1 : attackLeft2;
             } else if (direction.equals("right")) {
                 image = (attackFrame % 2 == 0) ? attackRight1 : attackRight2;
             }
         }
+
+        // 🛠 Normal Movement Sprites
         else {
             switch (direction) {
-                case "up":
-                    image = (spriteNum == 1) ? up1 : up2;
-                    break;
-                case "down":
-                    image = (spriteNum == 1) ? down1 : down2;
-                    break;
-                case "left":
-                    image = (spriteNum == 1) ? left1 : left2;
-                    break;
-                case "right":
-                    image = (spriteNum == 1) ? right1 : right2;
-                    break;
+                case "up": image = (spriteNum == 1) ? up1 : up2; break;
+                case "down": image = (spriteNum == 1) ? down1 : down2; break;
+                case "left": image = (spriteNum == 1) ? left1 : left2; break;
+                case "right": image = (spriteNum == 1) ? right1 : right2; break;
             }
         }
 
@@ -184,6 +218,8 @@ public class Player extends Entity {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }
     }
+
+
 
 
 
@@ -223,4 +259,18 @@ public class Player extends Entity {
         return hit;
     }
 
+    public void pickUpObject(int i){
+        if(i != 999){
+
+        }
+    }
+
+    public void interactNPC(int i){
+        if(i != 999){
+            gp.gameState = gp.dialogueState;
+            gp.npc[i].speak();
+        }
+    }
+
 }
+
