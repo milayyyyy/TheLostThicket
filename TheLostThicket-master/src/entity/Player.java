@@ -31,6 +31,8 @@ public class Player extends Entity {
 
     public int hp;
     public int mana;
+    public int maxHp;
+    public int maxMana;
     public List<EldenSkills> skills = new ArrayList<>();
     public boolean isStealth = false;
     public float alpha = 1.0f;
@@ -51,11 +53,14 @@ public class Player extends Entity {
         solidAreaDefaultY = 16;
         setDefaultValues();
         getPlayerImage();
-
+        hpAndMana();
         skills.add(new EldenSkills(1)); // Healing Bloom
         skills.add(new EldenSkills(2)); // Silent Steps
         skills.add(new EldenSkills(3)); // Puzzle Sense
     }
+
+    public int getMaxHp(){ return maxHp; }
+    public int getMaxMana(){ return maxMana; }
 
     public void useSkill(int index) {
         if (index >= 0 && index < skills.size()) {
@@ -65,12 +70,15 @@ public class Player extends Entity {
         }
     }
 
+
     public void hpAndMana(){
         switch(chosenCharacter){
-            case 0: hp = 100; mana = 50; break;
-            case 1: hp = 100; mana = 60; break;
-            case 2: hp = 120; mana = 50; break;
+            case 0: maxHp = 100; maxMana = 50; break;
+            case 1: maxHp = 100; maxMana = 60; break;
+            case 2: maxHp = 120; maxMana = 50; break;
         }
+        hp = maxHp;
+        mana = maxMana;
     }
 
     public void setDefaultValues() {
