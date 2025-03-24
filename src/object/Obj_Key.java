@@ -3,7 +3,8 @@ package object;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Obj_Key extends SuperObject{
+public class
+Obj_Key extends SuperObject{
     public Obj_Key(){
         name = "Key";
         try{

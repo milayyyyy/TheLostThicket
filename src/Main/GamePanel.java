@@ -11,7 +11,7 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable{
     //game screen
     //game settings
-    final int originalTileSize = 18; //16x16
+    final int originalTileSize = 16; //16x16
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 20;
@@ -20,8 +20,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenHeight = tileSize * maxScreenRow;
 
     //world settings
-    public final int maxWorldCol = 200;
-    public final int maxWorldRow = 200;
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
     public final int worldWidth = tileSize*maxWorldCol;
     public final int worldHeight = tileSize*maxWorldRow;
 
@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker ch = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public SuperObject obj[] = new SuperObject[10];
+    public EventHandler eHandler = new EventHandler(this);
 
 
     //game state
@@ -43,9 +44,11 @@ public class GamePanel extends JPanel implements Runnable{
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     //entity
     public Entity npc[] = new Entity[10];
+    public Entity animals[] = new Entity[10];
 
 
 
@@ -125,6 +128,8 @@ public class GamePanel extends JPanel implements Runnable{
 
             //player
             player.draw(g2);
+
+            ui.draw(g2);
 
             g2.dispose();
         }

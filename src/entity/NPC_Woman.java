@@ -15,6 +15,7 @@ public class NPC_Woman extends Entity{
         speed = 1;
         direction = "down";
         getImage();
+        setDialogue();
 
     }
     public void takeDamage(int damage) {
@@ -43,6 +44,12 @@ public class NPC_Woman extends Entity{
         }
     }
 
+    public  void setDialogue(){
+        dialogue[0] = "Hi bitch";
+        dialogue[1]= "adfasfsdfsfdfasdasdasdasdasdasdsd\nafasdasdasdsadasd";
+        dialogue[2] = "tangasdkfasdfioasdoaskdokasokdas\nputanginasdaskdkaskdaskd";
+    }
+
     public void setAction(){
         actionLockCounter++;
 
@@ -61,6 +68,11 @@ public class NPC_Woman extends Entity{
             }
             actionLockCounter = 0;
         }
+    }
+
+    public void speak(){
+
+        super.speak();
     }
 
     public void draw(Graphics2D g2) {
