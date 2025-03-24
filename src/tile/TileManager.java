@@ -33,24 +33,22 @@ public class TileManager {
             this.tile[2].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/trees.png"));
             this.tile[2].collision = true;
             this.tile[3] = new Tile();
-            this.tile[3].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/road.png"));
+            this.tile[3].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/wall.png"));
             this.tile[4] = new Tile();
-            this.tile[4].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pine.png"));
-            this.tile[4].collision = true;
+            this.tile[4].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/bridge.png"));
             this.tile[5] = new Tile();
-            this.tile[5].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/pineb.png"));
+            this.tile[5].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/fence2.png"));
+            this.tile[5].collision = true;
             this.tile[6] = new Tile();
-            this.tile[6].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/mushroom.png"));
-            this.tile[6].collision = true;
+            this.tile[6].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/bridge2.png"));
             this.tile[7] = new Tile();
-            this.tile[7].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/tree2.png"));
+            this.tile[7].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/torch.png"));
             this.tile[7].collision = true;
             this.tile[8] = new Tile();
-            this.tile[8].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/tree3.png"));
+            this.tile[8].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/fence3.png"));
             this.tile[8].collision = true;
             this.tile[9] = new Tile();
-            this.tile[9].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/tree4.png"));
-            this.tile[9].collision = true;
+            this.tile[9].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/floor2.png"));
             this.tile[10] = new Tile();
             this.tile[10].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/book.png"));
             this.tile[11] = new Tile();
@@ -69,6 +67,8 @@ public class TileManager {
             this.tile[16].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/treedown_right.png"));
             this.tile[17] = new Tile();
             this.tile[17].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/stand.png"));
+            this.tile[18] = new Tile();
+            this.tile[18].image = ImageIO.read(this.getClass().getResourceAsStream("/tiles/black.png"));
 
 
 
